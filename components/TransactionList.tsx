@@ -1,12 +1,15 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { verticalScale } from "@/utils/styling";
-import { colors,  radius,  spacingX, spacingY } from "@/constants/theme";
-import { TransactionItemProps, TransactionListType } from "@/types";
+import { colors, radius, spacingX, spacingY } from "@/constants/theme";
+import { TransactionItemProps, TransactionListType, TransactionType } from "@/types";
 import Typo from "./Typo";
 import { FlashList } from "@shopify/flash-list";
-import { expenseCategories } from "@/constants/data";
+import { expenseCategories, incomeCategory } from "@/constants/data";
 import Animated, { FadeInDown } from "react-native-reanimated";
+import { Timestamp } from "firebase/firestore";
+import { useRoute } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 
 const TransactionList = ({
   data,
@@ -14,10 +17,22 @@ const TransactionList = ({
   loading,
   emptyListMessage,
 }: TransactionListType) => {
-
-
-  const  handleClick = () =>{
-
+  const router = useRouter();
+  const handleClick = (item: TransactionType) => {
+    router.push({
+      pathname: "/(modals)/transactionModal",
+      params:{
+        id: item?.id,
+        type: item?.type,
+        amount: item?.amount?.toString(),
+        category:item?.category,
+        date:(item.date as Timestamp)?.toDate()?.toISOString(),
+        description: item?.description,
+        image: item?.image,
+        uid: item?.uid,
+        walletId: item?.walletId
+      }
+    })
   };
 
   return (
@@ -30,81 +45,87 @@ const TransactionList = ({
       <View style={styles.lists}>
         <FlashList
           data={data}
-          renderItem={({ item , index }) => (
-          <TransactionItem
-          item = {item}  index = {index}  handleClick = {handleClick} 
-          />)}
+          renderItem={({ item, index }) => (
+            <TransactionItem
+              item={item}
+              index={index}
+              handleClick={handleClick}
+            />
+          )}
           estimatedItemSize={60}
         />
       </View>
 
-        {
-            !loading && data.length == 0 && (
-                <Typo
-                size={15}
-                color={colors.neutral400}
-                style={{textAlign: "center" , marginTop: spacingY._15}}
-                >
-                    {emptyListMessage}
-                </Typo>
-            )
-        }
-
+      {!loading && data.length == 0 && (
+        <Typo
+          size={15}
+          color={colors.neutral400}
+          style={{ textAlign: "center", marginTop: spacingY._15 }}
+        >
+          {emptyListMessage}
+        </Typo>
+      )}
     </View>
   );
 };
 
 const TransactionItem = ({
-    item ,
-    index,
-    handleClick
-}:TransactionItemProps) =>{
+  item,
+  index,
+  handleClick,
+}: TransactionItemProps) => {
+  let category = item?.type == "income" ? incomeCategory : expenseCategories[item?.category!];
+  const IconComponent = category.icon;
 
-  let category  = expenseCategories['groceries']
-  const IconComponent = category.icon
-  console.log(category, "category")
+  const date = (item?.date as Timestamp)?.toDate().toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+  console.log(category, "category");
 
-    return(
-        <Animated.View
-        entering={FadeInDown.delay(index * 50)
-          .springify()
-          .damping(14)
-        }
-        >
-            <TouchableOpacity style={styles.row} onPress={()=> handleClick(item)}>
-                <View style={[styles.icon , {backgroundColor: category.bgColor}]}>
-                  {
-                      IconComponent&&(
-                        <IconComponent
-                        size={verticalScale(25)}
-                        weight="fill"
-                        color={colors.white}
-                        />
-                      )
-                  }
-                </View>
+  return (
+    <Animated.View
+      entering={FadeInDown.delay(index * 50)
+        .springify()
+        .damping(14)}
+    >
+      <TouchableOpacity style={styles.row} onPress={() => handleClick(item)}>
+        <View style={[styles.icon, { backgroundColor: category.bgColor }]}>
+          {IconComponent && (
+            <IconComponent
+              size={verticalScale(25)}
+              weight="fill"
+              color={colors.white}
+            />
+          )}
+        </View>
 
-                <View style={styles.categoryDes}>
-                  <Typo size={17}>{category.label}</Typo>
-                  <Typo size={12} color={colors.neutral400} textProps={{numberOfLines: 1}}>
-                    {/* {item?.description} */}
-                    guds dbd
-                  </Typo>
-                </View>
+        <View style={styles.categoryDes}>
+          <Typo size={17}>{category.label}</Typo>
+          <Typo
+            size={12}
+            color={colors.neutral400}
+            textProps={{ numberOfLines: 1 }}
+          >
+            {item?.description}
+          </Typo>
+        </View>
 
-                <View style={styles.amountDate}>
-                  <Typo fontWeight={"500"} color={colors.rose}>
-                    -$332
-                  </Typo>
-                  <Typo size={13} color={colors.neutral400}>
-                    12 days ago
-                  </Typo>
-                </View>
-
-            </TouchableOpacity>
-        </Animated.View>
-    )
-}
+        <View style={styles.amountDate}>
+          <Typo fontWeight={"500"} color={item?.type == "income" ? colors.primary : colors.rose}>
+            {
+              `${item?.type == "income" ? "+" : "-"} ${item?.amount}`
+            }
+          </Typo>
+          <Typo size={13} color={colors.neutral400}>
+            {date}
+          </Typo>
+        </View>
+      </TouchableOpacity>
+    </Animated.View>
+  );
+};
 
 export default TransactionList;
 
@@ -143,7 +164,7 @@ const styles = StyleSheet.create({
   },
   amountDate: {
     alignItems: "flex-end",
-    paddingRight:"5%",
+    paddingRight: "5%",
     gap: 3,
   },
 });

@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,  // Added horizontal padding for spacing
     paddingTop: Platform.select({
       ios: spacingY._15,
-      android: 50
+      android: 30
     }),
     paddingBottom: Platform.select({
       ios: spacingY._20,

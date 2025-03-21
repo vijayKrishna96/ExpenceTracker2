@@ -6,8 +6,34 @@ import { ImageBackground } from "expo-image";
 import Typo from "./Typo";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Feather from "@expo/vector-icons/Feather";
+import { useAuth } from "@/contexts/authContext";
+import useFetchData from "@/hooks/useFetchData";
+import { WalletType } from "@/types";
+import { orderBy, where } from "firebase/firestore";
 
 const HomeCard = () => {
+  const {user} = useAuth();
+
+  const {
+    data: wallets,
+    error,
+    loading: walletLoading,
+  } = useFetchData<WalletType>("wallets", [
+    where("uid", "==", user?.uid),
+    orderBy("created", "desc"),
+  ])
+
+  console.log(wallets, "walletsss")
+
+  const getTotals = () => {
+    return wallets.reduce((totals , item) =>{
+      totals.balance = totals.balance + Number(item.amount || 0);
+      totals.income = totals.income + Number(item.totalIncome || 0);
+      totals.expense = totals.expense + Number(item.totalExpenses || 0);
+      return totals;
+    },{balance: 0, income: 0, expense: 0})
+  }
+
   return (
     <ImageBackground
       source={require("../assets/images/card.png")}
@@ -27,7 +53,7 @@ const HomeCard = () => {
             />
           </View>
           <Typo color={colors.black} size={30} fontWeight={"700"}>
-            $2345.45
+            $ {walletLoading ? "----" :getTotals().balance?.toFixed(2)}
           </Typo>
         </View>
 
@@ -43,7 +69,7 @@ const HomeCard = () => {
             </View>
             <View style={{ alignSelf: "center" }}>
               <Typo size={17} color={colors.green} fontWeight={"600"}>
-                $2345.45
+              $ {walletLoading ? "----" : getTotals().income?.toFixed(2)}
               </Typo>
             </View>
           </View>
@@ -58,8 +84,8 @@ const HomeCard = () => {
               </Typo>
             </View>
             <View style={{ alignSelf: "center" }}>
-              <Typo size={17} color={colors.green} fontWeight={"600"}>
-                $2345.45
+              <Typo size={16} color={colors.neutral700} fontWeight={"500"}>
+              $ {walletLoading ? "----" : getTotals().expense?.toFixed(2)}
               </Typo>
             </View>
           </View>
