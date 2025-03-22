@@ -34,7 +34,7 @@ import useFetchData from "@/hooks/useFetchData";
 import { expenseCategories, transactionTypes } from "@/constants/data";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Input from "@/components/Input";
-import { createOrUpdateTransaction } from "@/services/transactionService";
+import { createOrUpdateTransaction, deleteTransaction } from "@/services/transactionService";
 
 const TransactionModal = () => {
   const { user, updateUserData } = useAuth();
@@ -151,7 +151,7 @@ const TransactionModal = () => {
   const onDelete = async () => {
     if (!oldTransaction?.id) return;
     setLoading(true);
-    const res = await deletewallet(oldTransaction?.id);
+    const res = await deleteTransaction(oldTransaction?.id , oldTransaction?.walletId);
     setLoading(false);
     if (res.success) {
       router.back();
