@@ -34,6 +34,10 @@ export const createOrUpdateTransaction = async (
       if (!res.success) return res;
     }
     
+    // Create a clean copy of the transaction data
+    const cleanTransactionData = { ...transactionData };
+    
+    // Handle image upload if provided
     if (image) {
       const imageUploadRes = await uploadfileToCloudinary(
         image,
@@ -45,18 +49,21 @@ export const createOrUpdateTransaction = async (
           msg: imageUploadRes.msg || "Failed to upload receipt",
         };
       }
-      transactionData.image = imageUploadRes.data;
+      cleanTransactionData.image = imageUploadRes.data;
+    } else {
+      // If image is undefined, remove the field from the data object
+      delete cleanTransactionData.image;
     }
 
     const transactionRef = id
       ? doc(firestore, "transactions", id)
       : doc(collection(firestore, "transactions"));
 
-    await setDoc(transactionRef, transactionData, { merge: true });
+    await setDoc(transactionRef, cleanTransactionData, { merge: true });
 
     return {
       success: true,
-      data: { ...transactionData, id: transactionRef.id }
+      data: { ...cleanTransactionData, id: transactionRef.id }
     };
   } catch (err: any) {
     console.log("error creating or updating transaction", err);
