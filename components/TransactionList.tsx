@@ -10,6 +10,7 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import { Timestamp } from "firebase/firestore";
 import { useRoute } from "@react-navigation/native";
 import { useRouter } from "expo-router";
+import Loading from "./Loading";
 
 const TransactionList = ({
   data,
@@ -36,37 +37,46 @@ const TransactionList = ({
   };
 
   return (
-    <View style={styles.container}>
-      {title && (
-        <Typo size={20} fontWeight={"500"} color={colors.white}>
-          {title}
-        </Typo>
-      )}
-      <View style={styles.lists}>
-        <FlashList
-          data={data}
-          renderItem={({ item, index }) => (
-            <TransactionItem
-              item={item}
-              index={index}
-              handleClick={handleClick}
-            />
+    <>
+      {loading ? (
+        <View style={styles.row}>
+          <Loading />
+        </View>
+      ) : (
+        <View style={styles.container}>
+          {title && (
+            <Typo size={20} fontWeight={"500"} color={colors.white}>
+              {title}
+            </Typo>
           )}
-          estimatedItemSize={60}
-        />
-      </View>
-
-      {!loading && data.length == 0 && (
-        <Typo
-          size={15}
-          color={colors.neutral400}
-          style={{ textAlign: "center", marginTop: spacingY._15 }}
-        >
-          {emptyListMessage}
-        </Typo>
+          <View style={styles.lists}>
+            <FlashList
+              data={data}
+              renderItem={({ item, index }) => (
+                <TransactionItem
+                  item={item}
+                  index={index}
+                  handleClick={handleClick}
+                />
+              )}
+              estimatedItemSize={60}
+            />
+          </View>
+  
+          {!loading && data.length == 0 && (
+            <Typo
+              size={15}
+              color={colors.neutral400}
+              style={{ textAlign: "center", marginTop: spacingY._15 }}
+            >
+              {emptyListMessage}
+            </Typo>
+          )}
+        </View>
       )}
-    </View>
+    </>
   );
+  
 };
 
 const TransactionItem = ({
@@ -82,7 +92,7 @@ const TransactionItem = ({
     month: "short",
     year: "numeric",
   });
-  console.log(category, "category");
+  // console.log(category, "category");
 
   return (
     <Animated.View

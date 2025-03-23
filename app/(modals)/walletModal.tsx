@@ -39,7 +39,7 @@ import {
   
     const oldWallet: { name: string; image: string; id: string } =
       useLocalSearchParams();
-    console.log("oldWallet", oldWallet);
+    // console.log("oldWallet", oldWallet);
   
     useEffect(() => {
       if (oldWallet?.id) {

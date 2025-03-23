@@ -83,7 +83,7 @@ const TransactionModal = () => {
 
   const oldTransaction:  paramType =
     useLocalSearchParams();
-  console.log("oldTransaction", oldTransaction);
+  // console.log("oldTransaction", oldTransaction);
 
   const onDateChange = (event: any, selectedDate: any) => {
     const currentDate = selectedDate || transaction.date;
@@ -316,7 +316,7 @@ const TransactionModal = () => {
           <View style={styles.inputContaier}>
             <Typo color={colors.neutral200}>Amount</Typo>
             <TextInput
-              style={styles.dateInput}
+              style={styles.textInput}
               placeholder="Enter amount"
               placeholderTextColor={colors.neutral300}
               keyboardType="numeric"
@@ -373,6 +373,7 @@ const TransactionModal = () => {
                   height: verticalScale(80),
                   textAlignVertical: "top",
                   paddingTop: spacingY._10,
+                  color: colors.neutral300,
                 },
               ]}
               placeholder="Enter description"
@@ -475,6 +476,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: spacingX._5,
+  },
+  textInput :{
+    flexDirection: "row",
+    height: verticalScale(54),
+    color: colors.neutral300,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: colors.neutral300,
+    borderRadius: radius._17,
+    borderCurve: "continuous",
+    paddingHorizontal: spacingX._15,
   },
   dateInput: {
     flexDirection: "row",

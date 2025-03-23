@@ -72,7 +72,7 @@ const onPickImage = async () => {
       quality: 1,
     });
 
-    console.log(result);
+    // console.log(result);
 
     if (!result.canceled) {
       setUserData({...userData , image:result.assets[0]});

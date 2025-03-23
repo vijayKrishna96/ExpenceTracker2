@@ -32,10 +32,10 @@ import {
       orderBy("created", "desc"),
     ]);
   
-    console.log(wallets[0], "wallets");
+    console.log(wallets, "wallets");
   
     const getTotalBalance = () => {
-      wallets.reduce((total , item) =>{
+      return wallets.reduce((total , item) =>{
         total = total + (item.amount || 0);
         return total
       }, 0)
@@ -46,9 +46,9 @@ import {
         <View style={styles.container}>
           {/* Balance View */}
           <View style={styles.balanceView}>
-            <View>
+            <View style={styles.balanceViewText}>
               <Typo size={45} fontWeight={"500"}>
-                $ {getTotalBalance()?.toFixed(2)}
+                <Text>&#x20B9;</Text>{getTotalBalance()}
               </Typo>
               <Typo size={16} color={colors.neutral400}>
                 Total Balance
@@ -64,7 +64,7 @@ import {
               <TouchableOpacity
                 onPress={() => router.push("../(modals)/walletModal")}
               >
-                <MaterialIcons name="add-circle" size={24} color="black" />
+                <MaterialIcons name="add-circle" size={24} color={colors.neutral600} />
               </TouchableOpacity>
             </View>
   
@@ -95,6 +95,10 @@ import {
       backgroundColor: colors.black,
       justifyContent: "center",
       alignItems: "center",
+    },
+    balanceViewText: {
+      alignItems: "center",
+      textAlign:"center"
     },
     flexRow: {
       flexDirection: "row",

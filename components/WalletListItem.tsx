@@ -30,7 +30,7 @@ const WalletListItem = ({
         })
     }
 
-    console.log(item , "itemmmmmmm")
+    // console.log(item , "itemm")
 
   return (
     <Animated.View

@@ -1,43 +1,41 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect } from 'react'
-import { colors } from '@/constants/theme'
-import { useRouter } from 'expo-router';
-
+import { Image, StyleSheet, Text, View } from "react-native";
+import React, { useEffect } from "react";
+import { colors } from "@/constants/theme";
+import { useRouter } from "expo-router";
+import { WebView } from "react-native-webview";
 
 const index = () => {
+  const router = useRouter();
 
-    const router = useRouter();
-
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         router.push('/welcome/welcome')
-    //     }, 2000)
-    // })
+  
 
   return (
     <View style={styles.container}>
       <Image
         styles = {styles.logo}
         resizeMode='contain'
-        source={require("../assets/images/splashImage.png")}
+        source={require("../assets/images/equilibrium.png")}
       />
+      
     </View>
   );
 };
 
-export default index
+export default index;
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: colors.neutral900
-    },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.neutral900,
+  },
 
-    logo: {
-        height: "20%",
-        aspectRatio : 1,
-    },
-
-})
+  logo: {
+    height: "10%",
+    aspectRatio: 1,
+  },
+  webview: {
+    flex: 1,
+},
+});

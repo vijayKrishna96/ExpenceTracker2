@@ -23,7 +23,7 @@ const HomeCard = () => {
     orderBy("created", "desc"),
   ])
 
-  console.log(wallets, "walletsss")
+  // console.log(wallets, "walletsss")
 
   const getTotals = () => {
     return wallets.reduce((totals , item) =>{
