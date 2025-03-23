@@ -2,12 +2,26 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
 import { colors } from "@/constants/theme";
 import { useRouter } from "expo-router";
-import { WebView } from "react-native-webview";
+import * as Updates from "expo-updates";
 
 const index = () => {
   const router = useRouter();
 
-  
+  useEffect(() => {
+    async function checkForUpdates() {
+      try {
+        const update = await Updates.checkForUpdateAsync();
+        if (update.isAvailable) {
+          await Updates.fetchUpdateAsync();
+          await Updates.reloadAsync(); // Restart app to apply update
+        }
+      } catch (error) {
+        console.error("Error checking for updates:", error);
+      }
+    }
+    checkForUpdates();
+  }, []);
+
 
   return (
     <View style={styles.container}>
