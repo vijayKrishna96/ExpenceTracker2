@@ -58,7 +58,7 @@ const Welcome = () => {
                 style={styles.buttonContainer}
                 >
                     {/* Button */}
-                    <Button onPress={()=> router.push('../()/auth/Signup')}>
+                    <Button onPress={()=> router.push('../(auth)/Signup')}>
                         <Typo size={22} color={colors.neutral900}>Get Started</Typo>
                     </Button>
                 </Animated.View>
