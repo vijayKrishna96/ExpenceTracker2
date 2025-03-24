@@ -82,9 +82,10 @@ const SearchModal = () => {
 
         <View>
           <TransactionList
-            data={allTransactions}
-            loading={filteredTransactions}
+            data={filteredTransactions}
+            loading={loading}
             emptyListMessage={"No transactions found"}
+            title=""
           />
         </View>
       </ScrollView>

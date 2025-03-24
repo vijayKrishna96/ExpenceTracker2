@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { colors } from "@/constants/theme";
 import { useRouter } from "expo-router";
 import * as Updates from "expo-updates";
+import Constants, { ExecutionEnvironment } from 'expo-constants';
 
 const index = () => {
   const router = useRouter();
@@ -19,7 +20,9 @@ const index = () => {
         console.error("Error checking for updates:", error);
       }
     }
-    checkForUpdates();
+    if (Constants.executionEnvironment !== ExecutionEnvironment.StoreClient) {
+      checkForUpdates();
+    }
   }, []);
 
 
