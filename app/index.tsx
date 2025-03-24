@@ -1,12 +1,14 @@
-import { Image, StyleSheet, Text, View } from "react-native";
-import React, { useEffect } from "react";
+import { Button, Image, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import { colors } from "@/constants/theme";
 import { useRouter } from "expo-router";
 import * as Updates from "expo-updates";
 import Constants, { ExecutionEnvironment } from 'expo-constants';
 
+
 const index = () => {
   const router = useRouter();
+  const [updateAvailable, setUpdateAvailable] = useState(false);
 
   useEffect(() => {
     async function checkForUpdates() {
@@ -14,7 +16,7 @@ const index = () => {
         const update = await Updates.checkForUpdateAsync();
         if (update.isAvailable) {
           await Updates.fetchUpdateAsync();
-          await Updates.reloadAsync(); // Restart app to apply update
+          setUpdateAvailable(true);
         }
       } catch (error) {
         console.error("Error checking for updates:", error);
@@ -25,6 +27,10 @@ const index = () => {
     }
   }, []);
 
+  const applyUpdate = async () => {
+    await Updates.reloadAsync();
+  };
+
 
   return (
     <View style={styles.container}>
@@ -33,6 +39,12 @@ const index = () => {
         resizeMode='contain'
         source={require("../assets/images/equilibrium.png")}
       />
+      {updateAvailable && (
+        <Button 
+          title="Update Available - Tap to Apply" 
+          onPress={applyUpdate} 
+        />
+      )}
       
     </View>
   );
