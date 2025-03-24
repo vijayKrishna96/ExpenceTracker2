@@ -54,7 +54,7 @@ const ScanText = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Text Scanner</Text>
+      <Text style={styles.title}>Scan Your Bill</Text>
 
       {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
 
@@ -85,13 +85,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F5F5F5",
+    backgroundColor: "",
     padding: 20,
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    color: "#007AFF",
   },
   image: {
     width: 300,

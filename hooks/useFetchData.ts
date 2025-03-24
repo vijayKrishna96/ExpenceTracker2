@@ -34,6 +34,8 @@ const useFetchData = <T>(
         return () => unsub();
     },[])
 
+    console.log(data,"dtdd")
+
   return {data , loading , error}
 }
 

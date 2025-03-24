@@ -1,7 +1,7 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import ScreenWrapper from "@/components/ScreenWrapper";
-import { colors,  radius,  spacingX, spacingY } from "@/constants/theme";
+import { colors, radius, spacingX, spacingY } from "@/constants/theme";
 import { verticalScale } from "@/utils/styling";
 import Header from "@/components/Header";
 import BackButton from "@/components/BackButton";
@@ -10,8 +10,9 @@ import { useAuth } from "@/contexts/authContext";
 import { Image } from "expo-image";
 
 import { accountOptionType } from "@/types";
+import { Ionicons } from "@expo/vector-icons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import AntDesign from '@expo/vector-icons/AntDesign';
+import AntDesign from "@expo/vector-icons/AntDesign";
 import Animated from "react-native-reanimated";
 import { FadeInDown } from "react-native-reanimated";
 import { signOut } from "firebase/auth";
@@ -26,55 +27,75 @@ const Profile = () => {
   const accountOptions: accountOptionType[] = [
     {
       title: "Edit Profile",
-      icon: <FontAwesome name="user" size={26} color={colors.white} weight="fill" />,
+      icon: (
+        <FontAwesome name="user" size={26} color={colors.white} weight="fill" />
+      ),
       routeName: "/(modals)/profileModal",
       bgColor: "#6366f1",
     },
     {
       title: "Settings",
-      icon: <FontAwesome name="user" size={26} color={colors.white}  weight="fill" />,
-      // routeName: "(modals)/profilemodal",
+      icon: (
+        <Ionicons
+          name={"settings-outline"}
+          size={22}
+          color={colors.white}
+        />
+      ),
+      routeName: "/(modals)/settingsModal",
       bgColor: "#059669",
     },
     {
       title: "Privacy Policy",
-      icon: <FontAwesome name="user" size={26} color={colors.white}  weight="fill" />,
-      // routeName: "(modals)/profilemodal",
+      icon: (
+        <Ionicons
+          name={"lock-closed-outline"}
+          size={22}
+          color={colors.white}
+        />
+      ),
+      routeName: "/(modals)/privacyPolicy",
       bgColor: colors.neutral600,
     },
     {
       title: "Logout",
-      icon: <FontAwesome name="user" size={26} color={colors.white}  weight="fill" />,
+      icon: (
+        <Ionicons
+          name={"log-out-outline"}
+          size={26}
+          color={colors.white}
+        />
+      ),
       // routeName: "(modals)/profilemodal",
       bgColor: "#e11d48",
     },
   ];
 
   const handleLogout = async () => {
-    await signOut(auth)
-  }
+    await signOut(auth);
+  };
 
   const showLogoutAlert = () => {
-    Alert.alert("Confirm" , "Are you sure you want to logout?" , [
+    Alert.alert("Confirm", "Are you sure you want to logout?", [
       {
         text: "Cancel",
-        onPress: ()=> console.log("Cancel logout")
-      } , 
+        onPress: () => console.log("Cancel logout"),
+      },
       {
-        text: "Logout" , 
+        text: "Logout",
         onPress: () => handleLogout(),
-          style: 'destructive'
-      }
+        style: "destructive",
+      },
     ]);
-  }
+  };
 
   const handlePress = (item: accountOptionType) => {
-    if(item.title === "Logout") {
+    if (item.title === "Logout") {
       showLogoutAlert();
     }
 
-    if(item.routeName) router.push(item.routeName);
-  }
+    if (item.routeName) router.push(item.routeName);
+  };
 
   return (
     <ScreenWrapper>
@@ -107,22 +128,26 @@ const Profile = () => {
           <View style={styles.accountOptions}>
             {accountOptions.map((item, index) => {
               return (
-                <Animated.View 
-                key={index} style={styles.listItem}
-                entering={FadeInDown.delay(index * 50)
-                  .springify()
-                  .damping(14)
-                }
+                <Animated.View
+                  key={index}
+                  style={styles.listItem}
+                  entering={FadeInDown.delay(index * 50)
+                    .springify()
+                    .damping(14)}
                 >
-                  <TouchableOpacity style={styles.flexRow} 
-                  onPress={() => handlePress(item)}
+                  <TouchableOpacity
+                    style={styles.flexRow}
+                    onPress={() => handlePress(item)}
                   >
-                    <View style={[styles.listIcon,
-                      { backgroundColor: item?.bgColor }
-                    ]} >
-                        {item.icon && item.icon}
+                    <View
+                      style={[
+                        styles.listIcon,
+                        { backgroundColor: item?.bgColor },
+                      ]}
+                    >
+                      {item.icon && item.icon}
                     </View>
-                    <Typo size={16} style={{flex: 1}} fontWeight={"500"} >
+                    <Typo size={16} style={{ flex: 1 }} fontWeight={"500"}>
                       {item.title}
                     </Typo>
                     <AntDesign name="right" size={24} color="white" />

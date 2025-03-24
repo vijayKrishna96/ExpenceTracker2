@@ -133,11 +133,18 @@ export type UserType = {
   email?: string | null;
   name: string | null;
   image?: any;
+  phone?: string | null;
+  address?: string | null;
+  personalInfo?: string | null;
 } | null;
 
 export type UserDataType = {
   name: string;
   image?: any;
+  email?: string ;
+  phone?: string | null;
+  address?: string | null;
+  personalInfo?: string | null;
 };
 
 export type AuthContextType = {

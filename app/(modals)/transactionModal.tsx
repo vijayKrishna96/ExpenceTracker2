@@ -35,6 +35,7 @@ import { expenseCategories, transactionTypes } from "@/constants/data";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import Input from "@/components/Input";
 import { createOrUpdateTransaction, deleteTransaction } from "@/services/transactionService";
+import ScanText from "@/components/Scanner";
 
 const TransactionModal = () => {
   const { user, updateUserData } = useAuth();
@@ -191,6 +192,12 @@ const TransactionModal = () => {
           contentContainerStyle={styles.form}
           showsVerticalScrollIndicator={false}
         >
+
+          {/* Scanner */}
+          <View>
+            <ScanText />
+          </View>
+
           <View style={styles.inputContaier}>
             <Typo color={colors.neutral200}>Type</Typo>
             <Dropdown
